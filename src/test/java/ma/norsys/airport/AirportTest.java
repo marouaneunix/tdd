@@ -1,8 +1,11 @@
 package ma.norsys.airport;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
-import java.util.function.Predicate;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("An Airport test")
 public class AirportTest {
@@ -14,19 +17,46 @@ public class AirportTest {
     // When : i remove a vip passenger
     // Then : i can remove it
 
-    Flight flight;
+    @Nested
+    @DisplayName("Given there is an economy flight")
+    class EconomyFlightTest {
+        private Flight economyFlight;
+        private Passenger marouane;
+        private Passenger ayoub;
 
-    @BeforeEach
-    @Test
-    @DisplayName("Given : A Flight with two passengers, vip and not vip")
-    public void setUp() {
-        flight = new Flight("f1");
-        flight.passengers.add(new Passenger("marouane", false));
-        flight.passengers.add(new Passenger("ayoub", true));
-        Assertions.assertAll(
-                () -> flight.passengers.stream().anyMatch(Passenger::isVip),
-                () -> flight.passengers.stream().anyMatch(Predicate.not(Passenger::isVip)));
+        @BeforeEach
+        void setup() {
+            economyFlight = new Flight("economy");
+            marouane = new Passenger("marouane", true);
+            ayoub = new Passenger("ayoub", false);
+        }
+
+        @Nested
+        @DisplayName("When : We have a usual passenger")
+        class UsualPassengerTest {
+
+            @Test
+            @DisplayName("Then : You can add and remove him from an economy flight")
+            void shouldRemoveOrAddTest() {
+                assertAll(
+                    () -> assertTrue(economyFlight.addPassenger(ayoub)),
+                    () -> assertFalse(economyFlight.removePassenger(ayoub)));
+            }
+        }
+
+        @Nested
+        @DisplayName("When : We have a vip passenger")
+        class VipPassengerTest {
+
+            @Test
+            @DisplayName("Then : You can add and remove him from an economy flight")
+            void shouldRemoveOrAddTest() {
+                assertAll(
+                        () -> assertTrue(economyFlight.addPassenger(marouane)),
+                        () -> assertTrue(economyFlight.removePassenger(marouane)));
+            }
+        }
+
+
     }
-
-
 }

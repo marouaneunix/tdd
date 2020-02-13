@@ -14,28 +14,23 @@ public class Flight {
         this.flightType = flightType;
     }
 
-    public void addPassenger(Passenger passenger) {
-        if(this.flightType.equals("economy")){
-            this.passengers.add(passenger);
-        }else {
-            if(passenger.isVip()) {
-                this.passengers.add(passenger);
-            } else {
-                throw new RuntimeException("ERROR");
-            }
+    public boolean addPassenger(Passenger passenger) {
+        if(!this.flightType.equals("economy") && this.flightType.equals("vip")) {
+            return false;
         }
+        return this.passengers.add(passenger);
     }
 
-    public void removePassenger(Passenger passenger) {
-
-        if(passenger.isVip()) {
-            this.passengers = this.passengers
-                    .stream()
-                    .filter(passenger1 -> passenger.getName().equals(passenger1.getName()))
-                    .collect(Collectors.toList());
-            } else {
-            throw new RuntimeException("Error");
+    public boolean removePassenger(Passenger passenger) {
+        if(!passenger.isVip()){
+            return false;
         }
+        this.passengers = this.passengers
+            .stream()
+            .filter(passenger1 -> passenger.getName().equals(passenger1.getName()))
+            .collect(Collectors.toList());
+        return true;
+
     }
 
     @Override

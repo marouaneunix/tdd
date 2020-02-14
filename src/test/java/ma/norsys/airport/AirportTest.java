@@ -5,17 +5,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("An Airport test")
-public class AirportTest {
-
-    //Given : a Flight with two passengers, vip and not vip
-    // When : I remove a simple passenger
-    // Then : I can not remove it
-
-    // When : i remove a vip passenger
-    // Then : i can remove it
+class AirportTest {
 
     @Nested
     @DisplayName("Given there is an economy flight")
@@ -40,7 +35,8 @@ public class AirportTest {
             void shouldRemoveOrAddTest() {
                 assertAll(
                     () -> assertTrue(economyFlight.addPassenger(ayoub)),
-                    () -> assertFalse(economyFlight.removePassenger(ayoub)));
+                    () -> assertFalse(economyFlight.removePassenger(ayoub)),
+                    () -> assertFalse(economyFlight.removePassenger(new Passenger("test", true))));
             }
         }
 
@@ -56,7 +52,74 @@ public class AirportTest {
                         () -> assertTrue(economyFlight.removePassenger(marouane)));
             }
         }
+    }
 
+    @Nested
+    @DisplayName("Given there is an vip flight")
+    class VipFlightTest {
+        private Flight vipFlight;
+        private Passenger marouane;
+        private Passenger ayoub;
 
+        @BeforeEach
+        void setup() {
+            vipFlight = new Flight("vip");
+            marouane = new Passenger("marouane", true);
+            ayoub = new Passenger("ayoub", false);
+        }
+
+        @Nested
+        @DisplayName("When : We have a usual passenger")
+        class UsualPassengerTest {
+
+            @Test
+            @DisplayName("Then : You can't add him from an vip flight")
+            void shouldNotRemoveOrAddTest() {
+                assertFalse(vipFlight.addPassenger(ayoub));
+                assertEquals(0, vipFlight.passengers.size());
+            }
+        }
+
+        @Nested
+        @DisplayName("When : We have a vip passenger")
+        class VipPassengerTest {
+
+            @Test
+            @DisplayName("Then : You can add and remove him from an economy flight")
+            void shouldRemoveOrAddTest() {
+                assertAll(
+                        () -> assertTrue(vipFlight.addPassenger(marouane)),
+                        () -> assertEquals(1, vipFlight.passengers.size()),
+                        () -> assertTrue(vipFlight.removePassenger(marouane)),
+                        () -> assertEquals(0, vipFlight.passengers.size()));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("Given there is an unknown flight type")
+    class UnknownFlightTest {
+
+        private Flight unknownFlight;
+        private Passenger vip;
+        private Passenger usual;
+
+        @BeforeEach
+        void setup() {
+            unknownFlight = new Flight("unknown");
+            vip = new Passenger("marouane", true);
+            usual = new Passenger("ayoub", false);
+        }
+
+        @Nested
+        @DisplayName("When: We have a vip or a usual passenger")
+        class UsIpPassenger {
+            @Test
+            @DisplayName("Then : you can do nothing")
+            void testt() {
+                assertThrows(IllegalArgumentException.class, () -> unknownFlight.addPassenger(vip));
+                assertThrows(IllegalArgumentException.class, () -> unknownFlight.addPassenger(usual));
+            }
+        }
     }
 }

@@ -1,7 +1,5 @@
 package ma.norsys.airport;
 
-import java.util.Objects;
-
 public class Passenger {
 
     private String name;
@@ -18,13 +16,5 @@ public class Passenger {
 
     public String getName() {
         return name;
-    }
-
-    @Override
-    public String toString() {
-        return "Passenger{" +
-                "name='" + name + '\'' +
-                ", vip=" + vip +
-                '}';
     }
 }

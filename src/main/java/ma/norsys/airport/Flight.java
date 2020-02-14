@@ -15,7 +15,10 @@ public class Flight {
     }
 
     public boolean addPassenger(Passenger passenger) {
-        if(!this.flightType.equals("economy") && this.flightType.equals("vip")) {
+        if(!flightType.equals("economy") && !flightType.equals("vip")) {
+            throw new IllegalArgumentException();
+        }
+        if(flightType.equals("vip") && !passenger.isVip()) {
             return false;
         }
         return this.passengers.add(passenger);
@@ -25,19 +28,17 @@ public class Flight {
         if(!passenger.isVip()){
             return false;
         }
-        this.passengers = this.passengers
-            .stream()
-            .filter(passenger1 -> passenger.getName().equals(passenger1.getName()))
-            .collect(Collectors.toList());
-        return true;
 
-    }
-
-    @Override
-    public String toString() {
-        return "Flight{" +
-                "flightType='" + flightType + '\'' +
-                ", passengers=" + passengers +
-                '}';
+        List<Passenger> newPassengers = new ArrayList<>();
+        boolean isDeleted = false;
+        for (Passenger currentPassenger: this.passengers) {
+            if(currentPassenger.getName().equals(passenger.getName())) {
+                isDeleted = true;
+            } else {
+                newPassengers.add(currentPassenger);
+            }
+        }
+        this.passengers = newPassengers;
+        return isDeleted;
     }
 }

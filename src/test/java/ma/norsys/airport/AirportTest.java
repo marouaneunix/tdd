@@ -5,8 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("An Airport test")
@@ -32,11 +30,19 @@ class AirportTest {
 
             @Test
             @DisplayName("Then : You can add and remove him from an economy flight")
-            void shouldRemoveOrAddTest() {
+            void shouldAddToEconomyFlight() {
                 assertAll(
                     () -> assertTrue(economyFlight.addPassenger(ayoub)),
                     () -> assertFalse(economyFlight.removePassenger(ayoub)),
                     () -> assertFalse(economyFlight.removePassenger(new Passenger("test", true))));
+            }
+
+            @Test
+            @DisplayName("Then : Should add him one")
+            void shouldAddHimOnce() {
+                economyFlight.addPassenger(ayoub);
+                economyFlight.addPassenger(ayoub);
+                assertEquals(1, economyFlight.passengers.size());
             }
         }
 
@@ -46,7 +52,7 @@ class AirportTest {
 
             @Test
             @DisplayName("Then : You can add and remove him from an economy flight")
-            void shouldRemoveOrAddTest() {
+            void shouldRemoveOrAddFromEconomyFlight() {
                 assertAll(
                         () -> assertTrue(economyFlight.addPassenger(marouane)),
                         () -> assertTrue(economyFlight.removePassenger(marouane)));
@@ -74,7 +80,7 @@ class AirportTest {
 
             @Test
             @DisplayName("Then : You can't add him from an vip flight")
-            void shouldNotRemoveOrAddTest() {
+            void shouldNotAddAUsualPassengerToVipFlightTest() {
                 assertFalse(vipFlight.addPassenger(ayoub));
                 assertEquals(0, vipFlight.passengers.size());
             }
@@ -86,7 +92,7 @@ class AirportTest {
 
             @Test
             @DisplayName("Then : You can add and remove him from an economy flight")
-            void shouldRemoveOrAddTest() {
+            void shouldRemoveOrAddVipPassengerTest() {
                 assertAll(
                         () -> assertTrue(vipFlight.addPassenger(marouane)),
                         () -> assertEquals(1, vipFlight.passengers.size()),
@@ -116,7 +122,7 @@ class AirportTest {
         class UsIpPassenger {
             @Test
             @DisplayName("Then : you can do nothing")
-            void testt() {
+            void shouldThrowException() {
                 assertThrows(IllegalArgumentException.class, () -> unknownFlight.addPassenger(vip));
                 assertThrows(IllegalArgumentException.class, () -> unknownFlight.addPassenger(usual));
             }

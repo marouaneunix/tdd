@@ -1,13 +1,15 @@
 package ma.norsys.airport;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Flight {
 
     public String flightType;
-    public List<Passenger> passengers = new ArrayList<>();
+    public Set<Passenger> passengers = new HashSet<>();
 
 
     public Flight(String flightType) {
@@ -29,7 +31,7 @@ public class Flight {
             return false;
         }
 
-        List<Passenger> newPassengers = new ArrayList<>();
+        Set<Passenger> newPassengers = new HashSet<>();
         boolean isDeleted = false;
         for (Passenger currentPassenger: this.passengers) {
             if(currentPassenger.getName().equals(passenger.getName())) {

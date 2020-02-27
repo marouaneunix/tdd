@@ -6,33 +6,34 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.runner.JUnitPlatform;
-import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.mockito.ArgumentMatchers.doubleThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@RunWith(JUnitPlatform.class)
 public class FlightServiceTest {
 
     @Mock
     FlightRepository flightRepository;
 
-
+    @InjectMocks
+    FlightService flightService;
 
     @DisplayName("Should add Passenger")
     @Test
     public void shouldAddPassenger() {
-        lenient().doNothing().when(flightRepository).removePassenger(any(), any());
+        doNothing().when(flightRepository).addPassenger(any(), any());
         Flight flight = new Flight("vip");
         Passenger passenger = new Passenger("marouane", true);
-        FlightService flightService = new FlightService(flightRepository);
+        flightService.addPassenger(flight, passenger);
 
-        Assertions.assertTrue(flightService.addPassenger(flight, passenger));
+
+        verify(flightRepository).addPassenger(any(), any());
 
 
     }

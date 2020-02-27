@@ -3,15 +3,16 @@ package ma.norsys.airport.service;
 import ma.norsys.airport.Flight;
 import ma.norsys.airport.Passenger;
 import ma.norsys.airport.repository.FlightRepository;
+import ma.norsys.airport.repository.IFlightRepository;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class FlightService {
 
-    private FlightRepository flightRepository;
+    private IFlightRepository flightRepository;
 
-    public FlightService(FlightRepository flightRepository) {
+    public FlightService(IFlightRepository flightRepository) {
         this.flightRepository = flightRepository;
     }
 
